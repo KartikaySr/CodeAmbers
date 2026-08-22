@@ -55,3 +55,25 @@ CREATE TABLE IF NOT EXISTS public.messages (
   kind TEXT CHECK (kind IN ('user', 'agent', 'system')),
   timestamp TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+-- 6. Agents Table (for dashboard management)
+CREATE TABLE IF NOT EXISTS public.agents (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  call_sign TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'idle',
+  specialty TEXT NOT NULL,
+  accent TEXT NOT NULL,
+  workspace_id UUID REFERENCES public.workspaces(id) ON DELETE CASCADE
+);
+
+-- 7. Agent Metrics (for Power BI-like dashboard)
+CREATE TABLE IF NOT EXISTS public.agent_metrics (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  agent_id TEXT NOT NULL REFERENCES public.agents(id) ON DELETE CASCADE,
+  workspace_id UUID NOT NULL REFERENCES public.workspaces(id) ON DELETE CASCADE,
+  cpu_usage DECIMAL NOT NULL,
+  memory_usage DECIMAL NOT NULL,
+  tasks_completed INTEGER NOT NULL,
+  timestamp TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);

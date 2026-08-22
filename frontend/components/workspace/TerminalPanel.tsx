@@ -18,7 +18,7 @@ export function TerminalPanel() {
         setLoading(false);
       }
     });
-    return unsub;
+    return () => { unsub(); };
   }, []);
 
   const explainError = () => {

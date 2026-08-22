@@ -105,7 +105,7 @@ export function EditorPanel() {
               onChange={(value: string | undefined) => updateFileContent(activeFile.id, value ?? "")}
               onMount={(editor, monaco) => {
                 monaco.languages.registerInlineCompletionsProvider(activeFile.language, {
-                  provideInlineCompletions: async (model, position, context, token) => {
+                  provideInlineCompletions: async (model: any, position: any, context: any, token: any) => {
                     const textUntilPosition = model.getValueInRange({ startLineNumber: 1, startColumn: 1, endLineNumber: position.lineNumber, endColumn: position.column });
                     const textAfterPosition = model.getValueInRange({ startLineNumber: position.lineNumber, startColumn: position.column, endLineNumber: model.getLineCount(), endColumn: model.getLineMaxColumn(model.getLineCount()) });
                     

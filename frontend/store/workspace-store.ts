@@ -2,9 +2,11 @@
 
 import { create } from "zustand";
 import { api, clearAuthTokens, getStoredUser, persistAuthTokens, type AuthResult } from "@/lib/api";
-import { files as seedFiles, initialMessages } from "@/data/mock";
 import { nowLabel, uid } from "@/lib/utils";
 import type { AgentRole, ChatMessage, WorkspaceFile } from "@/types";
+
+const seedFiles: WorkspaceFile[] = [];
+const initialMessages: ChatMessage[] = [];
 
 type ConnectionStatus = "idle" | "connecting" | "connected" | "reconnecting" | "disconnected" | "error";
 
@@ -18,7 +20,7 @@ type AuthUser = AuthResult["user"];
 
 type WorkspaceState = {
   files: WorkspaceFile[];
-  activeFileId: string;
+  activeFileId: string | null;
   messages: ChatMessage[];
   activeAgents: AgentRole[];
   streaming: boolean;
@@ -88,7 +90,7 @@ function scheduleFileSync(get: () => WorkspaceState, file: WorkspaceFile) {
 
 export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   files: seedFiles,
-  activeFileId: seedFiles[0].id,
+  activeFileId: null,
   messages: initialMessages,
   activeAgents: ["architect", "backend", "security"],
   streaming: false,
@@ -199,7 +201,7 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
         workspaceName: workspace.name,
         workspaces,
         files: loadedFiles,
-        activeFileId: loadedFiles[0]?.id ?? seedFiles[0].id,
+        activeFileId: loadedFiles[0]?.id ?? null,
         error: null
       });
 

@@ -104,13 +104,13 @@ class CodeAmbersSocket {
 
   subscribe(listener: Listener) {
     this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
+    return () => { this.listeners.delete(listener); };
   }
 
   onStatus(listener: StatusListener) {
     this.statusListeners.add(listener);
     listener(this.status);
-    return () => this.statusListeners.delete(listener);
+    return () => { this.statusListeners.delete(listener); };
   }
 
   private setStatus(status: SocketStatus) {

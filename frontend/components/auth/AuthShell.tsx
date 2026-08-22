@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { PageShell } from "@/components/effects/PageShell";
 import { Panel } from "@/components/ui/Panel";
 import { useWorkspaceStore } from "@/store/workspace-store";
+import { createClient } from "@/utils/supabase/client";
 
 export function AuthShell({ mode }: { mode: "sign-in" | "sign-up" }) {
   const isSignUp = mode === "sign-up";
@@ -103,6 +104,18 @@ export function AuthShell({ mode }: { mode: "sign-in" | "sign-up" }) {
                 </label>
                 {storeError && <p className="rounded-lg border border-amber-core/20 bg-amber-core/10 px-3 py-2 text-sm text-amber-100">{storeError}</p>}
                 <Button type="submit" disabled={authLoading} className="mt-2 w-full disabled:cursor-not-allowed disabled:opacity-60">{authLoading ? "Authorizing..." : isSignUp ? "Create CodeAmbers workspace" : "Enter workspace"}</Button>
+                
+                {/* Dev Bypass */}
+                <Button 
+                  type="button" 
+                  onClick={() => {
+                    document.cookie = "dev_bypass=true; path=/";
+                    router.push("/dashboard");
+                  }} 
+                  className="mt-2 w-full border border-amber-core/20 bg-amber-core/5 text-amber-core hover:bg-amber-core/10"
+                >
+                  Bypass Auth (Local Dev)
+                </Button>
               </form>
               <p className="mt-6 text-center text-sm text-zinc-500">
                 {isSignUp ? "Already have access?" : "Need an account?"}{" "}

@@ -44,7 +44,7 @@ export function AgentConfigModal({ isOpen, onClose }: AgentConfigModalProps) {
                     <div className={`size-2 rounded-full ${selectedAgentId === agent.id ? 'bg-amber-core' : 'bg-zinc-600'}`} />
                     <div>
                       <div className="text-sm font-medium text-white">{agent.name}</div>
-                      <div className="text-xs text-zinc-500">{agent.role}</div>
+                      <div className="text-xs text-zinc-500">{agent.specialty}</div>
                     </div>
                   </button>
                 ))}
@@ -56,7 +56,7 @@ export function AgentConfigModal({ isOpen, onClose }: AgentConfigModalProps) {
                   <textarea 
                     rows={4}
                     className="w-full rounded-lg border border-white/10 bg-black/50 px-3 py-2 text-sm text-zinc-300 outline-none focus:border-amber-core/50 resize-none font-mono"
-                    defaultValue={`You are a ${selectedAgent.role} agent. Your job is to...`}
+                    defaultValue={`You are a ${selectedAgent.specialty} agent. Your job is to...`}
                   />
                 </div>
                 
