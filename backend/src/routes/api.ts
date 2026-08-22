@@ -1,19 +1,12 @@
 import { Router } from 'express';
+import workspacesRouter from './workspaces.js';
+import filesRouter from './files.js';
+import chatRouter from './chat.js';
 
 const router = Router();
 
-// Placeholder for Agent routes (Planner, Coder, etc.)
-router.post('/agent/planner', (req, res) => {
-  // Logic to call Groq with GROQ_API_KEY_PLANNER
-  res.json({ message: 'Planner agent response' });
-});
-
-router.post('/agent/coder', (req, res) => {
-  res.json({ message: 'Coder agent response' });
-});
-
-router.post('/agent/reviewer', (req, res) => {
-  res.json({ message: 'Reviewer agent response' });
-});
+router.use('/workspaces', workspacesRouter);
+router.use('/files', filesRouter);
+router.use('/chat', chatRouter);
 
 export default router;
