@@ -44,42 +44,32 @@ body {
   mix-blend-mode: screen;
 }
 
-/* Luxurious 3D Glassmorphism */
+/* Clean IDE Panels */
 .glass {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%);
-  box-shadow: 
-    inset 0 1px 1px rgba(255, 255, 255, 0.15), 
-    inset 0 -1px 1px rgba(0, 0, 0, 0.5),
-    0 30px 60px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(40px) saturate(120%);
-  border-radius: 20px;
-  transform-style: preserve-3d;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #0a0a0a;
+  border-radius: 8px;
 }
 
-/* Specific floating panel utility */
+/* Minimal hover elevation */
 .floating-panel {
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 .floating-panel:hover {
-  transform: translateY(-4px) translateZ(20px);
-  box-shadow: 
-    inset 0 1px 1px rgba(255, 255, 255, 0.2), 
-    0 40px 80px rgba(0, 0, 0, 0.8),
-    0 0 40px rgba(255, 170, 0, 0.15);
-  border-color: rgba(255, 170, 0, 0.25);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Floating interactive buttons */
+/* Flat interactive buttons */
 .floating-btn {
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  transform-style: preserve-3d;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
 }
 .floating-btn:hover {
-  transform: translateY(-2px) translateZ(10px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 170, 0, 0.3);
-  background: rgba(255, 170, 0, 0.15);
-  border-color: rgba(255, 170, 0, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .amber-ring { box-shadow: 0 0 0 1px rgba(255, 170, 0, 0.3), 0 0 60px rgba(255, 170, 0, 0.25); }

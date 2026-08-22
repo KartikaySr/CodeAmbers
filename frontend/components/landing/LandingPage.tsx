@@ -1,98 +1,137 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Play, Sparkles } from "lucide-react";
+import { ArrowRight, TerminalSquare, Code2, Cpu, Sparkles, ChevronRight } from "lucide-react";
 import { agents, featureCards } from "@/data/mock";
 import { AgentCard } from "@/components/agents/AgentCard";
-import { Button } from "@/components/ui/Button";
 import { Brand } from "@/components/ui/Brand";
-import { PageShell } from "@/components/effects/PageShell";
 import { HeroTerminal } from "@/components/landing/HeroTerminal";
 import { LivePreview } from "@/components/landing/LivePreview";
-import { Panel } from "@/components/ui/Panel";
+import Link from "next/link";
 
 export function LandingPage() {
   return (
-    <PageShell>
-      <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-        <Brand />
-        <nav className="hidden items-center gap-6 text-sm text-zinc-400 md:flex">
-          <a href="#preview" className="hover:text-white">Preview</a>
-          <a href="#agents" className="hover:text-white">Agents</a>
-          <a href="#future" className="hover:text-white">Vision</a>
-        </nav>
-        <Button href="/sign-in" variant="secondary">Sign in</Button>
+    <div className="min-h-screen bg-[#000000] text-zinc-200 selection:bg-zinc-800 selection:text-white font-sans overflow-x-hidden">
+      {/* Sleek Enterprise Nav */}
+      <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-black/50 backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6">
+          <Brand />
+          <nav className="hidden items-center gap-8 text-sm font-medium text-zinc-400 md:flex">
+            <a href="#features" className="hover:text-white transition-colors">Features</a>
+            <a href="#agents" className="hover:text-white transition-colors">Agents</a>
+            <a href="#infrastructure" className="hover:text-white transition-colors">Infrastructure</a>
+          </nav>
+          <div className="flex items-center gap-4">
+            <Link href="/sign-in" className="text-sm font-medium text-zinc-300 hover:text-white transition-colors">Log in</Link>
+            <Link href="/workspace" className="hidden md:flex h-8 items-center justify-center rounded-md bg-white px-4 text-sm font-medium text-black hover:bg-zinc-200 transition-colors">
+              Deploy Workspace
+            </Link>
+          </div>
+        </div>
       </header>
-      <section className="relative mx-auto flex min-h-[calc(100vh-88px)] max-w-7xl flex-col items-center justify-center px-6 pb-20 pt-12 text-center">
-        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-core/20 bg-amber-core/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.22em] text-amber-200">
-          <Sparkles className="size-3.5" /> AI engineering operating system
+
+      {/* High-Contrast Minimalist Hero */}
+      <section className="relative mx-auto flex min-h-[85vh] max-w-7xl flex-col items-center justify-center px-6 py-24 text-center">
+        {/* Subtle Background Glow instead of noise */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
+        
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="z-10 mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-zinc-300">
+          <Sparkles className="size-4 text-amber-500" />
+          <span>CodeAmbers 2.0 is now available</span>
+          <ChevronRight className="size-4 text-zinc-500" />
         </motion.div>
-        <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-balance max-w-6xl text-6xl font-semibold tracking-[-0.04em] text-white md:text-8xl lg:text-9xl">
-          Fuel for Autonomous Engineering.
+        
+        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="z-10 max-w-5xl text-5xl font-bold tracking-tight text-white md:text-7xl lg:text-8xl">
+          The collaborative AI <br className="hidden md:block"/> engineering platform.
         </motion.h1>
-        <motion.p initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-7 max-w-2xl text-lg leading-8 text-zinc-400 md:text-xl">
-          CodeAmbers transforms software creation into a real-time AI-native collaborative experience.
+        
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="z-10 mt-8 max-w-2xl text-lg text-zinc-400 md:text-xl">
+          Build, review, and ship software with a swarm of intelligent agents. CodeAmbers provides the runtime, you provide the vision.
         </motion.p>
-        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-9 flex flex-col items-center gap-3 sm:flex-row">
-          <Button href="/workspace" icon={<ArrowRight className="size-4" />}>Enter Workspace</Button>
-          <Button href="#preview" variant="secondary" icon={<Play className="size-4" />}>Watch Demo</Button>
+        
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="z-10 mt-10 flex flex-col items-center gap-4 sm:flex-row">
+          <Link href="/workspace" className="flex h-12 items-center justify-center gap-2 rounded-md bg-white px-8 text-sm font-medium text-black hover:bg-zinc-200 transition-colors">
+            Start Building <ArrowRight className="size-4" />
+          </Link>
+          <a href="#preview" className="flex h-12 items-center justify-center gap-2 rounded-md border border-white/10 bg-transparent px-8 text-sm font-medium text-white hover:bg-white/5 transition-colors">
+            View Documentation
+          </a>
         </motion.div>
-        <div className="w-full"><HeroTerminal /></div>
+        
+        <div className="z-10 mt-24 w-full max-w-5xl rounded-xl border border-white/10 bg-[#0a0a0a] shadow-2xl overflow-hidden">
+          <HeroTerminal />
+        </div>
       </section>
-      <div id="preview"><LivePreview /></div>
-      <section className="mx-auto max-w-7xl px-6 py-20">
-        <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber-core">Capabilities</p>
-            <h2 className="mt-3 text-4xl font-semibold tracking-tight text-white md:text-6xl">A complete AI build loop.</h2>
+
+      {/* Clean Feature Grid */}
+      <section id="features" className="border-t border-white/5 bg-[#050505]">
+        <div className="mx-auto max-w-7xl px-6 py-32">
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold tracking-tight text-white md:text-5xl">Everything you need to ship.</h2>
+            <p className="mt-4 max-w-2xl text-lg text-zinc-400">CodeAmbers combines real-time collaboration with intelligent automation to accelerate your development lifecycle.</p>
           </div>
-          <p className="max-w-md text-sm leading-6 text-zinc-400">The interface is built around continuous orchestration, not static dashboards.</p>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {featureCards.map((feature, index) => (
-            <motion.div key={feature.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.04 }}>
-              <Panel className="h-full p-5">
-                <feature.icon className="size-5 text-amber-core" />
-                <h3 className="mt-6 text-lg font-semibold text-white">{feature.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-zinc-400">{feature.copy}</p>
-              </Panel>
-            </motion.div>
-          ))}
+          
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {featureCards.map((feature, index) => (
+              <motion.div key={feature.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group rounded-xl border border-white/5 bg-[#0a0a0a] p-6 hover:border-white/10 transition-colors">
+                <div className="mb-4 flex size-10 items-center justify-center rounded-lg bg-white/5">
+                  <feature.icon className="size-5 text-zinc-300 group-hover:text-amber-500 transition-colors" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">{feature.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-zinc-400">{feature.copy}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
-      <section id="agents" className="mx-auto max-w-7xl px-6 py-20">
-        <div className="mb-10 text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber-core">AI Agents</p>
-          <h2 className="mt-3 text-4xl font-semibold text-white md:text-6xl">Specialists that move as one.</h2>
+
+      {/* Live Preview Section */}
+      <section id="preview" className="border-t border-white/5 bg-black py-32">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-16 text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-white md:text-5xl">Experience the Workspace.</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-zinc-400">A seamless environment blending Monaco editor, interactive terminals, and multi-agent chat.</p>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-[#0a0a0a] overflow-hidden shadow-2xl">
+            <LivePreview />
+          </div>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">{agents.map((agent) => <AgentCard key={agent.id} agent={agent} />)}</div>
       </section>
-      <section id="future" className="mx-auto max-w-7xl px-6 py-24">
-        <Panel className="relative min-h-[460px] p-8 md:p-14">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(245,158,11,0.18),transparent_36%),radial-gradient(circle_at_20%_70%,rgba(34,211,238,0.10),transparent_34%)]" />
-          <div className="relative grid h-full gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+
+      {/* Agents Section */}
+      <section id="agents" className="border-t border-white/5 bg-[#050505] py-32">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-16 md:flex md:items-end md:justify-between">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber-core">Future of Engineering</p>
-              <h2 className="mt-4 max-w-3xl text-5xl font-semibold tracking-tight text-white md:text-7xl">Control a living engineering system.</h2>
-              <p className="mt-6 max-w-xl text-lg leading-8 text-zinc-400">Describe intent, watch agents negotiate the build, inspect the code, and keep every decision observable.</p>
+              <h2 className="text-3xl font-bold tracking-tight text-white md:text-5xl">Meet your new team.</h2>
+              <p className="mt-4 max-w-2xl text-lg text-zinc-400">Specialized AI agents designed to handle specific domains of your software architecture.</p>
             </div>
-            <div className="grid gap-3 font-mono text-xs">
-              {["intent parsed", "plan converged", "patch streaming", "review gate passed", "preview ready"].map((step, index) => (
-                <motion.div key={step} animate={{ opacity: [0.45, 1, 0.45] }} transition={{ duration: 2.2, repeat: Infinity, delay: index * 0.2 }} className="rounded-lg border border-white/5 bg-black/35 px-4 py-3 text-zinc-300">
-                  0{index + 1}. {step}
-                </motion.div>
-              ))}
-            </div>
+            <Link href="/workspace" className="hidden md:inline-flex items-center gap-2 text-sm font-medium text-amber-500 hover:text-amber-400 transition-colors">
+              Configure Agents <ArrowRight className="size-4" />
+            </Link>
           </div>
-        </Panel>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+            {agents.map((agent) => (
+              <div key={agent.id} className="rounded-xl border border-white/5 bg-[#0a0a0a] p-5 hover:border-white/10 transition-colors">
+                <AgentCard agent={agent} />
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
-      <footer className="mx-auto max-w-7xl px-6 pb-12">
-        <Panel className="p-8 text-center md:p-12">
-          <h2 className="text-4xl font-semibold text-white md:text-6xl">Enter the autonomous workspace.</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-zinc-400">CodeAmbers is a fully integrated end-to-end platform powered by Groq AI and WebSockets for real-time collaboration.</p>
-          <div className="mt-8"><Button href="/workspace" icon={<ArrowRight className="size-4" />}>Launch CodeAmbers</Button></div>
-        </Panel>
+
+      {/* Minimal Footer */}
+      <footer className="border-t border-white/5 bg-black py-12">
+        <div className="mx-auto max-w-7xl px-6 flex flex-col items-center justify-between gap-6 md:flex-row">
+          <Brand />
+          <p className="text-sm text-zinc-500">© 2026 CodeAmbers. All rights reserved.</p>
+          <div className="flex gap-6 text-sm font-medium text-zinc-500">
+            <a href="#" className="hover:text-white transition-colors">Privacy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms</a>
+            <a href="#" className="hover:text-white transition-colors">Twitter</a>
+          </div>
+        </div>
       </footer>
-    </PageShell>
+    </div>
   );
 }

@@ -25,7 +25,14 @@ export function setupWebSocket(server: Server) {
         
         if (data.type === 'AI_PROMPT' && data.prompt && data.workspaceId) {
           const { workspaceId, prompt, mode } = data;
-          const agentRole = mode || 'architect';
+          
+          const validRoles = ['architect', 'frontend', 'backend', 'security', 'devops'];
+          let agentRole: AgentRole = 'architect';
+          if (mode && validRoles.includes(mode)) {
+            agentRole = mode as AgentRole;
+          } else if (mode === 'code') {
+            agentRole = 'frontend';
+          }
           
           let history: any[] = [];
           try {

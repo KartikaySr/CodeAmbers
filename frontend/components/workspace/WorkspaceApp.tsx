@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { AmbientBackground } from "@/components/effects/AmbientBackground";
 import { Particles } from "@/components/effects/Particles";
 import { ChatPanel } from "@/components/workspace/ChatPanel";
@@ -24,32 +24,10 @@ export function WorkspaceApp() {
   const activeMode = useModeStore((state) => state.activeMode);
   const modeData = WORKSPACE_MODES[activeMode];
 
-  // 3D Spatial Tilt Logic
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const mouseXSpring = useSpring(x, { stiffness: 100, damping: 30 });
-  const mouseYSpring = useSpring(y, { stiffness: 100, damping: 30 });
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["3deg", "-3deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-3deg", "3deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-
   return (
     <main 
       className="noise relative h-screen w-screen overflow-hidden bg-black transition-colors duration-1000"
       style={{ boxShadow: `inset 0 0 150px ${modeData.accent}05` }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => { x.set(0); y.set(0); }}
     >
       <AmbientBackground />
       <div 
@@ -58,21 +36,20 @@ export function WorkspaceApp() {
       />
       <Particles />
       <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }} 
+        initial={{ opacity: 0, scale: 0.98 }} 
         animate={{ opacity: 1, scale: 1 }} 
         transition={{ duration: 0.8, ease: "easeOut" }} 
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative z-10 flex h-full w-full gap-6 p-6 pt-16 perspective-[2000px]"
+        className="relative z-10 flex h-full w-full gap-4 p-4 pt-16"
       >
-        <div className="absolute top-4 right-6 flex gap-3 translate-z-[80px]" style={{ transform: "translateZ(80px)" }}>
-          <button onClick={() => setShowDb(true)} className="floating-btn glass px-4 py-2 rounded-full text-xs font-semibold text-emerald-400 hover:text-emerald-300">Supabase DB</button>
-          <button onClick={() => setShowAgents(true)} className="floating-btn glass px-4 py-2 rounded-full text-xs font-semibold text-amber-core hover:text-amber-300">Agent Config</button>
-          <button onClick={() => setShowSettings(true)} className="floating-btn glass px-4 py-2 rounded-full text-xs font-semibold text-zinc-300 hover:text-white">API Keys</button>
+        <div className="absolute top-4 right-4 flex gap-3">
+          <button onClick={() => setShowDb(true)} className="floating-btn glass px-4 py-2 rounded-md text-xs font-semibold text-emerald-400 hover:text-emerald-300 border border-emerald-500/20">Supabase DB</button>
+          <button onClick={() => setShowAgents(true)} className="floating-btn glass px-4 py-2 rounded-md text-xs font-semibold text-amber-core hover:text-amber-300 border border-amber-500/20">Agent Config</button>
+          <button onClick={() => setShowSettings(true)} className="floating-btn glass px-4 py-2 rounded-md text-xs font-semibold text-zinc-300 hover:text-white border border-white/10">API Keys</button>
         </div>
-        <div className="w-[18%] flex-shrink-0 h-full flex translate-z-[20px]" style={{ transform: "translateZ(20px)" }}>
+        <div className="w-[240px] flex-shrink-0 h-full flex">
           <Sidebar />
         </div>
-        <div className="flex h-full min-h-0 flex-col gap-6 flex-1 translate-z-[40px]" style={{ transform: "translateZ(40px)" }}>
+        <div className="flex h-full min-h-0 flex-col gap-4 flex-1">
           <div className="min-h-0 flex-[3] flex">
             <EditorPanel />
           </div>
@@ -80,7 +57,7 @@ export function WorkspaceApp() {
             <TerminalPanel />
           </div>
         </div>
-        <div className="w-[30%] flex-shrink-0 h-full flex translate-z-[60px]" style={{ transform: "translateZ(60px)" }}>
+        <div className="w-[320px] flex-shrink-0 h-full flex">
           <ChatPanel />
         </div>
       </motion.div>
