@@ -16,7 +16,7 @@ export function setupWebSocket(server: Server) {
           type: string, 
           prompt?: string, 
           workspaceId?: string, 
-          mode?: AgentRole,
+          mode?: string,
           prefix?: string,
           suffix?: string,
           fileContent?: string,
