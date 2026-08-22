@@ -10,12 +10,18 @@ export type ServerEvent =
   | { type: "STREAM_END"; streamId: string; status: "completed" | "failed"; sentAt?: string }
   | { type: "WORKSPACE_PATCH"; file?: string; content?: string; sentAt?: string }
   | { type: "PROJECT_UPDATED"; file?: unknown; sentAt?: string }
+  | { type: "AUTOCOMPLETE_RESULT"; content: string; sentAt?: string }
+  | { type: "EXPLAIN_ERROR_RESULT"; content: string; sentAt?: string }
+  | { type: "CODE_REVIEW_RESULT"; content: string; sentAt?: string }
   | { type: "ERROR"; code?: string; message: string; sentAt?: string }
   | { type: "PONG"; sentAt?: string };
 
 type ClientEvent =
   | { type: "PING" }
-  | { type: "AI_PROMPT"; prompt: string; workspaceId: string; activeFile?: string; mode: "chat" | "code" | "architecture" | "review" }
+  | { type: "AI_PROMPT"; prompt: string; workspaceId: string; activeFile?: string; mode: "chat" | "code" | "architecture" | "review" | "architect" | "frontend" | "backend" | "security" | "devops" }
+  | { type: "AI_AUTOCOMPLETE"; prefix: string; suffix: string }
+  | { type: "AI_EXPLAIN_ERROR"; errorOutput: string }
+  | { type: "AI_CODE_REVIEW"; fileContent: string }
   | { type: "WORKSPACE_PATCH"; workspaceId: string; file: { path: string; name: string; language: string; content: string } };
 
 type Listener = (event: ServerEvent) => void;

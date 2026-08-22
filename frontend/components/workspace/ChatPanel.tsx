@@ -15,11 +15,11 @@ export function ChatPanel() {
   }, [messages]);
 
   return (
-    <section className="relative flex h-full min-h-0 flex-col border-r border-white/5 bg-[#050505]/70">
-      <div className="shrink-0 border-b border-white/5 px-5 py-4">
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="font-mono text-xs uppercase tracking-[0.22em] text-amber-core">Conversational Orchestration</motion.p>
+    <section className="glass floating-panel relative flex h-full min-h-0 w-full flex-col overflow-hidden">
+      <div className="shrink-0 border-b border-white/5 px-5 py-4 bg-black/30">
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="font-mono text-xs uppercase tracking-[0.22em] text-amber-core drop-shadow-[0_0_8px_rgba(255,170,0,0.4)]">Conversational Orchestration</motion.p>
         <div className="mt-2 flex items-end justify-between gap-4">
-          <h1 className="text-2xl font-semibold text-white">Command Stream</h1>
+          <h1 className="text-2xl font-semibold text-white drop-shadow-lg">Command Stream</h1>
           <div className={[
             "rounded-full border px-3 py-1 text-xs",
             socketStatus === "connected"

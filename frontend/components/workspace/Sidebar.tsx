@@ -16,7 +16,7 @@ export function Sidebar() {
   const [activeNav, setActiveNav] = useState(initialNavItems.find(i => i.active)?.label || initialNavItems[0].label);
 
   return (
-    <aside className="flex h-full min-h-0 flex-col border-r border-white/5 bg-black/45 p-4 backdrop-blur-2xl">
+    <aside className="glass floating-panel flex w-full h-full min-h-0 flex-col p-5">
       <Brand className="shrink-0" />
       <Panel className="mt-5 shrink-0 p-3">
         <div className="flex items-center gap-3">
@@ -85,8 +85,8 @@ export function Sidebar() {
         </div>
       </div>
       <div className="mt-4 grid shrink-0 grid-cols-2 gap-2">
-        <button className="flex items-center justify-center gap-2 rounded-lg border border-white/5 bg-white/[0.04] px-3 py-2 text-xs text-zinc-300 hover:bg-white/[0.08] transition-colors"><Bell className="size-3.5" /> 12</button>
-        <button onClick={() => logout()} className="flex items-center justify-center gap-2 rounded-lg border border-white/5 bg-white/[0.04] px-3 py-2 text-xs text-zinc-300 hover:bg-white/[0.08] hover:text-red-400 transition-colors"><Settings className="size-3.5" /> Logout</button>
+        <button className="floating-btn flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-zinc-300 hover:text-amber-core"><Bell className="size-3.5" /> 12</button>
+        <button onClick={() => logout()} className="floating-btn flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-zinc-300 hover:text-red-400"><Settings className="size-3.5" /> Logout</button>
       </div>
     </aside>
   );

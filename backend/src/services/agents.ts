@@ -45,3 +45,26 @@ export async function processAgentMessage(
     onChunk('\n[Error: Unable to process request]');
   }
 }
+
+export async function processAgentSingleMessage(
+  role: AgentRole,
+  prompt: string,
+  systemOverride?: string
+): Promise<string> {
+  const client = groqClients[role];
+  try {
+    const response = await client.chat.completions.create({
+      messages: [
+        { role: 'system', content: systemOverride || agentPrompts[role] },
+        { role: 'user', content: prompt }
+      ],
+      model: 'llama-3.3-70b-versatile',
+      stream: false,
+      temperature: 0.1,
+    });
+    return response.choices[0]?.message?.content || '';
+  } catch (error) {
+    console.error(`Error processing single message for ${role}:`, error);
+    return '';
+  }
+}
