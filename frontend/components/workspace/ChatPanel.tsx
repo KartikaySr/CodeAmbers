@@ -16,15 +16,15 @@ export function ChatPanel() {
 
   return (
     <section className="glass floating-panel relative flex h-full min-h-0 w-full flex-col overflow-hidden">
-      <div className="shrink-0 border-b border-white/5 px-5 py-4 bg-black/30">
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="font-mono text-xs uppercase tracking-[0.22em] text-amber-core drop-shadow-[0_0_8px_rgba(255,170,0,0.4)]">Conversational Orchestration</motion.p>
+      <div className="shrink-0 border-b border-white/[0.04] px-6 py-5 bg-white/[0.01]">
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">Conversational Orchestration</motion.p>
         <div className="mt-2 flex items-end justify-between gap-4">
-          <h1 className="text-2xl font-semibold text-white drop-shadow-lg">Command Stream</h1>
+          <h1 className="text-xl font-semibold text-zinc-100 tracking-tight">Command Stream</h1>
           <div className={[
-            "rounded-full border px-3 py-1 text-xs",
+            "rounded-full border px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase shadow-sm",
             socketStatus === "connected"
-              ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
-              : "border-amber-core/20 bg-amber-core/10 text-amber-200"
+              ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+              : "border-amber-500/20 bg-amber-500/10 text-amber-500"
           ].join(" ")}>
             {backendStatus === "offline" ? "backend offline" : `websocket ${socketStatus}`}
           </div>

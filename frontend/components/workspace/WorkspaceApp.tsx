@@ -47,19 +47,19 @@ export function WorkspaceApp() {
   return (
     <main 
       className="noise relative h-screen w-screen overflow-hidden bg-black transition-colors duration-1000"
-      style={{ boxShadow: `inset 0 0 150px ${modeData.accent}05` }}
+      style={{ boxShadow: `inset 0 0 150px ${modeData.accent}03` }}
     >
       <AmbientBackground />
       <div 
-        className="absolute inset-0 z-0 opacity-20 pointer-events-none transition-colors duration-1000"
-        style={{ background: `radial-gradient(circle at top right, ${modeData.accent}30, transparent 40%)` }}
+        className="absolute inset-0 z-0 opacity-15 pointer-events-none transition-colors duration-1000"
+        style={{ background: `radial-gradient(circle at top right, ${modeData.accent}25, transparent 50%)` }}
       />
       <Particles />
       <motion.div 
         initial={{ opacity: 0, scale: 0.98 }} 
         animate={{ opacity: 1, scale: 1 }} 
         transition={{ duration: 0.8, ease: "easeOut" }} 
-        className="relative z-10 flex h-full w-full gap-4 p-4 pt-16"
+        className="relative z-10 flex h-full w-full gap-5 p-5 pt-16"
       >
         <div className="absolute top-4 right-4 flex gap-3">
           <button onClick={() => setShowIntegrations(true)} className="floating-btn glass px-4 py-2 rounded-md text-xs font-semibold text-blue-400 hover:text-blue-300 border border-blue-500/20">Integrations / Export</button>
@@ -67,11 +67,11 @@ export function WorkspaceApp() {
           <button onClick={() => setShowAgents(true)} className="floating-btn glass px-4 py-2 rounded-md text-xs font-semibold text-amber-core hover:text-amber-300 border border-amber-500/20">Agent Config</button>
           <button onClick={() => setShowSettings(true)} className="floating-btn glass px-4 py-2 rounded-md text-xs font-semibold text-zinc-300 hover:text-white border border-white/10">API Keys</button>
         </div>
-        <div className="w-[240px] flex-shrink-0 h-full flex">
+        <div className="w-[260px] flex-shrink-0 h-full flex">
           <Sidebar />
         </div>
-        <div className="flex h-full min-h-0 flex-col gap-4 flex-1">
-          <div className="min-h-0 flex-[3] flex gap-4">
+        <div className="flex h-full min-h-0 flex-col gap-5 flex-1">
+          <div className="min-h-0 flex-[3] flex gap-5">
             <div className="flex-1 min-w-0">
               <EditorPanel />
             </div>
@@ -83,7 +83,7 @@ export function WorkspaceApp() {
             <TerminalPanel />
           </div>
         </div>
-        <div className="w-[320px] flex-shrink-0 h-full flex">
+        <div className="w-[340px] flex-shrink-0 h-full flex">
           <ChatPanel />
         </div>
       </motion.div>

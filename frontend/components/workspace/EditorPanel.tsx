@@ -48,55 +48,57 @@ export function EditorPanel() {
 
   return (
     <section className="glass floating-panel flex h-full min-h-0 w-full flex-col overflow-hidden">
-      <div className="flex shrink-0 items-center justify-between border-b border-white/5 px-4 py-3 bg-black/20">
+      <div className="flex shrink-0 items-center justify-between border-b border-white/[0.04] px-5 py-4 bg-white/[0.01]">
         <div>
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-amber-core drop-shadow-[0_0_10px_rgba(255,170,0,0.5)]">Live Workspace</p>
-          <h2 className="mt-1 text-lg font-semibold text-white drop-shadow-md">Monaco Code Surface</h2>
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">Live Workspace</p>
+          <h2 className="mt-1 text-[15px] font-medium text-zinc-100 tracking-wide">Monaco Code Surface</h2>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button 
             onClick={reviewCode}
             disabled={loadingReview}
-            className="floating-btn flex items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-200 transition hover:bg-amber-500/20 shadow-[0_0_10px_rgba(255,170,0,0.2)]"
+            className="floating-btn flex items-center gap-2 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-1.5 text-[13px] font-medium text-amber-500 transition hover:bg-amber-500/10"
           >
             <ShieldAlert className="size-3.5" /> {loadingReview ? "Reviewing..." : "Review Code"}
           </button>
           <button 
             onClick={() => setShowPreview(!showPreview)}
-            className={cn("floating-btn flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium transition", showPreview ? "border-amber-core/50 bg-amber-core/20 text-amber-50 shadow-[0_0_15px_rgba(255,170,0,0.3)]" : "border-white/10 bg-white/5 text-zinc-300 hover:text-white")}
+            className={cn("floating-btn flex items-center gap-2 rounded-lg border px-3 py-1.5 text-[13px] font-medium transition-all duration-300", showPreview ? "border-amber-500/30 bg-amber-500/10 text-amber-400" : "border-white/[0.04] bg-white/[0.02] text-zinc-400 hover:text-zinc-200")}
           >
             {showPreview ? <><EyeOff className="size-3.5" /> Close Preview</> : <><Eye className="size-3.5" /> Live Preview</>}
           </button>
           {[Search, SplitSquareHorizontal, Maximize2, Play].map((Icon, index) => (
-            <button key={index} className="floating-btn grid size-9 place-items-center rounded-lg border border-white/10 bg-white/5 text-zinc-300 hover:text-white"><Icon className="size-4" /></button>
+            <button key={index} className="floating-btn grid size-8 place-items-center rounded-lg border border-white/[0.04] bg-white/[0.02] text-zinc-400 hover:text-zinc-200 transition-colors"><Icon className="size-3.5" /></button>
           ))}
         </div>
       </div>
-      <div className="flex shrink-0 border-b border-white/5 bg-black/30">
+      <div className="flex shrink-0 border-b border-white/[0.04] bg-black/40 px-3 py-2 gap-2">
         {files.map((file) => (
-          <button key={file.id} onClick={() => setActiveFile(file.id)} className={cn("flex min-w-0 items-center gap-2 border-r border-white/5 px-4 py-3 text-sm text-zinc-400 transition hover:bg-white/[0.05] hover:text-white", activeFileId === file.id && "bg-amber-core/10 text-amber-100 shadow-[inset_0_-2px_0_rgba(255,170,0,0.8)]")}>
-            <FileCode2 className="size-4 shrink-0" /><span className="truncate">{file.name}</span>{file.dirty && <span className="size-1.5 rounded-full bg-amber-core shadow-[0_0_8px_rgba(255,170,0,1)]" />}
+          <button key={file.id} onClick={() => setActiveFile(file.id)} className={cn("flex min-w-0 items-center gap-2 rounded-md px-3 py-1.5 text-[13px] font-medium transition-all duration-200", activeFileId === file.id ? "bg-white/[0.08] text-zinc-100 shadow-sm border border-white/[0.04]" : "text-zinc-500 hover:bg-white/[0.04] hover:text-zinc-300 border border-transparent")}>
+            <FileCode2 className="size-3.5 shrink-0" /><span className="truncate">{file.name}</span>{file.dirty && <span className="size-1.5 rounded-full bg-amber-400" />}
           </button>
         ))}
       </div>
-      <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[190px_1fr]">
-        <aside className="hidden border-r border-white/5 bg-black/20 p-3 md:block">
-          <div className="mb-3 flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-zinc-500 drop-shadow-sm"><Code2 className="size-3.5" /> Files</div>
+      <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[200px_1fr]">
+        <aside className="hidden border-r border-white/[0.04] bg-white/[0.01] p-4 md:block">
+          <div className="mb-4 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500"><Code2 className="size-3.5" /> Files</div>
           <div className="grid gap-1">
             {files.map((file) => (
-              <button key={file.id} onClick={() => setActiveFile(file.id)} className={cn("truncate rounded-md px-2 py-2 text-left text-xs text-zinc-400 hover:bg-white/[0.05] hover:text-white", activeFileId === file.id && "bg-white/[0.08] text-white shadow-sm")}>{file.path}</button>
+              <button key={file.id} onClick={() => setActiveFile(file.id)} className={cn("truncate rounded-md px-2.5 py-2 text-left text-[13px] font-medium transition-colors duration-200", activeFileId === file.id ? "bg-white/[0.06] text-zinc-100" : "text-zinc-500 hover:bg-white/[0.04] hover:text-zinc-300")}>{file.path}</button>
             ))}
           </div>
-          <div className="mt-6 rounded-lg border border-white/5 bg-white/[0.03] p-3">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-500">Streaming Patch</p>
-            <motion.div className="mt-3 h-1.5 rounded-full bg-amber-core" animate={{ width: ["20%", "94%", "45%", "78%"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} />
-            <p className="mt-3 text-xs leading-5 text-zinc-500">
+          <div className="mt-8 rounded-xl border border-white/[0.04] bg-white/[0.02] p-4 shadow-inner">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Streaming Patch</p>
+            <div className="mt-4 h-1 w-full rounded-full bg-black/50 overflow-hidden relative border border-white/[0.05]">
+               <motion.div className="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-amber-500 to-orange-400" animate={{ width: ["15%", "85%", "35%", "95%"] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} />
+            </div>
+            <p className="mt-4 text-[11px] leading-relaxed font-medium text-zinc-500">
               {backendStatus === "online" ? "AI edits stream from Groq into the active Monaco buffer." : "Local editor cache active while backend reconnects."}
             </p>
           </div>
         </aside>
-        <div className="min-w-0 flex h-full">
-          <div className={cn("h-full transition-all duration-300 relative", showPreview ? "w-1/2 border-r border-white/5" : "w-full")}>
+        <div className="min-w-0 flex h-full bg-[#0a0a0c]">
+          <div className={cn("h-full transition-all duration-300 relative", showPreview ? "w-1/2 border-r border-white/[0.04]" : "w-full")}>
             <MonacoEditor
               height="100%"
               language={activeFile.language}
