@@ -1,4 +1,5 @@
 import { groqClients } from './groq.js';
+import Groq from 'groq-sdk';
 import type { AgentRole, ChatMessage } from '../types.js';
 
 export const agentPrompts: Record<AgentRole, string> = {
@@ -12,9 +13,15 @@ export const agentPrompts: Record<AgentRole, string> = {
 export async function processAgentMessage(
   role: AgentRole,
   history: ChatMessage[],
+  apiKey: string | undefined,
   onChunk: (chunk: string) => void
 ) {
-  const client = groqClients[role];
+  let client = groqClients[role];
+  
+  if (apiKey && apiKey.trim() !== '') {
+    // Override the default dummy client if an API key was provided
+    client = new Groq({ apiKey });
+  }
   
   const messages = history.map(msg => ({
     role: msg.kind === 'user' ? 'user' : 'assistant',
@@ -40,9 +47,17 @@ export async function processAgentMessage(
         onChunk(content);
       }
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error(`Error processing message for ${role}:`, error);
-    onChunk('\n[Error: Unable to process request]');
+    
+    // Explicitly handle common Groq errors
+    if (error.status === 401 || error.message?.includes("401")) {
+      onChunk('\n\n> **[ERROR: Authentication Failed]**\n> Your Groq API key is missing or invalid. Please open the **API Keys** settings panel in the top right and add a valid Groq API key.');
+    } else if (error.status === 429) {
+      onChunk('\n\n> **[ERROR: Rate Limited]**\n> The Groq API rate limit was exceeded. Please try again in a few moments.');
+    } else {
+      onChunk(`\n\n> **[SYSTEM ERROR]**\n> ${error.message || 'An unknown error occurred connecting to the AI provider.'}`);
+    }
   }
 }
 

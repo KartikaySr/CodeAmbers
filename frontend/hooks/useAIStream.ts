@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { codeAmbersSocket } from "@/lib/socket";
 import { nowLabel, uid } from "@/lib/utils";
 import { useWorkspaceStore } from "@/store/workspace-store";
+import type { AgentRole } from "@/components/workspace/PromptDock";
 
 export function useAIStream() {
   const appendMessage = useWorkspaceStore((state) => state.appendMessage);
@@ -12,7 +13,7 @@ export function useAIStream() {
   const workspaceId = useWorkspaceStore((state) => state.workspaceId);
   const activeFile = useWorkspaceStore((state) => state.files.find((file) => file.id === state.activeFileId));
 
-  const runPrompt = useCallback((prompt: string) => {
+  const runPrompt = useCallback((prompt: string, mode: AgentRole = "architect") => {
     if (!prompt.trim()) return;
     setError(null);
     setStreaming(true);
@@ -23,13 +24,17 @@ export function useAIStream() {
       timestamp: nowLabel(),
       kind: "user"
     });
+    
+    // Retrieve the user's API Key from Settings
+    const apiKey = localStorage.getItem("GROQ_API_KEY") || undefined;
 
     const sent = codeAmbersSocket.send({
       type: "AI_PROMPT",
       prompt: prompt.trim(),
       workspaceId,
       activeFile: activeFile?.path,
-      mode: "code"
+      mode: mode as any,
+      apiKey
     });
 
     if (!sent) {

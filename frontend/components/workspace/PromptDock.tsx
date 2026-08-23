@@ -7,8 +7,12 @@ import { useAIStream } from "@/hooks/useAIStream";
 import { useWorkspaceStore } from "@/store/workspace-store";
 import { cn } from "@/lib/utils";
 
+export type AgentRole = "architect" | "frontend" | "backend" | "security" | "devops";
+
 export function PromptDock() {
   const [prompt, setPrompt] = useState("");
+  const [agentMode, setAgentMode] = useState<AgentRole>("architect");
+  const [showAgentMenu, setShowAgentMenu] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState<{name: string, type: 'image'|'doc', content?: string}[]>([]);
@@ -112,7 +116,7 @@ export function PromptDock() {
       }
     });
     
-    runPrompt(finalPrompt);
+    runPrompt(finalPrompt, agentMode);
     setPrompt("");
     setAttachedFiles([]);
   };
@@ -166,12 +170,45 @@ export function PromptDock() {
 
         <input type="file" ref={fileInputRef} className="hidden" accept=".pdf,image/*" onChange={handleFileUpload} />
 
-        <div className={cn("glass amber-ring flex items-center gap-2 rounded-full p-2 transition-all", isRecording && "ring-2 ring-red-500/50 bg-red-500/5")}>
-          <button onClick={() => setShowAttachments(!showAttachments)} aria-label="Attach file" className="grid size-10 shrink-0 place-items-center rounded-full text-zinc-400 transition hover:bg-white/[0.08] hover:text-white">
+        <div className={cn("glass relative flex items-center gap-2 rounded-2xl p-2 transition-all shadow-2xl backdrop-blur-xl border-white/10", isRecording ? "ring-2 ring-red-500/50 bg-red-500/5" : "bg-[#0a0a0a]/80 focus-within:bg-[#0a0a0a]/95 focus-within:ring-1 focus-within:ring-white/20")}>
+          
+          <div className="relative">
+            <button 
+              onClick={() => { setShowAgentMenu(!showAgentMenu); setShowAttachments(false); }}
+              className="flex items-center gap-1.5 rounded-lg bg-white/5 hover:bg-white/10 px-3 py-1.5 text-xs font-medium text-zinc-300 transition"
+            >
+              <Sparkles className="size-3.5 text-amber-core" />
+              <span className="capitalize">{agentMode}</span>
+            </button>
+            
+            <AnimatePresence>
+              {showAgentMenu && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }} 
+                  animate={{ opacity: 1, y: 0, scale: 1 }} 
+                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                  className="absolute bottom-full left-0 mb-2 w-40 overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a]/90 p-1 shadow-2xl backdrop-blur-xl"
+                >
+                  {(["architect", "frontend", "backend", "security", "devops"] as AgentRole[]).map(role => (
+                    <button 
+                      key={role}
+                      onClick={() => { setAgentMode(role); setShowAgentMenu(false); }}
+                      className={cn(
+                        "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs transition",
+                        agentMode === role ? "bg-amber-core/10 text-amber-core font-medium" : "text-zinc-400 hover:bg-white/10 hover:text-white"
+                      )}
+                    >
+                      <span className="capitalize">{role}</span>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <button onClick={() => { setShowAttachments(!showAttachments); setShowAgentMenu(false); }} aria-label="Attach file" className="grid size-9 shrink-0 place-items-center rounded-full text-zinc-400 transition hover:bg-white/10 hover:text-white">
             <Paperclip className="size-4" />
           </button>
-          
-          <Sparkles className={cn("size-4 shrink-0 transition-colors", isRecording ? "text-red-400" : "text-amber-core")} />
           
           <input 
             value={prompt} 

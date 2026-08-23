@@ -18,7 +18,7 @@ export type ServerEvent =
 
 type ClientEvent =
   | { type: "PING" }
-  | { type: "AI_PROMPT"; prompt: string; workspaceId: string; activeFile?: string; mode: "chat" | "code" | "architecture" | "review" | "architect" | "frontend" | "backend" | "security" | "devops" }
+  | { type: "AI_PROMPT"; prompt: string; workspaceId: string; activeFile?: string; mode: "chat" | "code" | "architecture" | "review" | "architect" | "frontend" | "backend" | "security" | "devops"; apiKey?: string }
   | { type: "AI_AUTOCOMPLETE"; prefix: string; suffix: string }
   | { type: "AI_EXPLAIN_ERROR"; errorOutput: string }
   | { type: "AI_CODE_REVIEW"; fileContent: string }

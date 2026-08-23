@@ -17,6 +17,7 @@ export function setupWebSocket(server: Server) {
           prompt?: string, 
           workspaceId?: string, 
           mode?: string,
+          apiKey?: string,
           prefix?: string,
           suffix?: string,
           fileContent?: string,
@@ -24,7 +25,7 @@ export function setupWebSocket(server: Server) {
         };
         
         if (data.type === 'AI_PROMPT' && data.prompt && data.workspaceId) {
-          const { workspaceId, prompt, mode } = data;
+          const { workspaceId, prompt, mode, apiKey } = data;
           
           const validRoles = ['architect', 'frontend', 'backend', 'security', 'devops'];
           let agentRole: AgentRole = 'architect';
@@ -58,6 +59,7 @@ export function setupWebSocket(server: Server) {
           await processAgentMessage(
             agentRole,
             [...(history || []), { kind: 'user', body: prompt, author: 'user', id: 'temp', timestamp: new Date().toISOString() }],
+            apiKey,
             (chunk: string) => {
               ws.send(JSON.stringify({ type: 'CHAT_CHUNK', content: chunk }));
             }
