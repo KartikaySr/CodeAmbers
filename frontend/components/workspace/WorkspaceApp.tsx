@@ -7,7 +7,8 @@ import { ChatPanel } from "@/components/workspace/ChatPanel";
 import { EditorPanel } from "@/components/workspace/EditorPanel";
 import { Sidebar } from "@/components/workspace/Sidebar";
 import { TerminalPanel } from "@/components/workspace/TerminalPanel";
-import { useState } from "react";
+import { ExperienceSelector } from "@/components/onboarding/ExperienceSelector";
+import { useEffect, useState } from "react";
 import { useBackendConnection } from "@/hooks/useBackendConnection";
 import { ProgressionInterface } from "@/components/workspace/ProgressionInterface";
 import { useModeStore, WORKSPACE_MODES } from "@/store/mode-store";
@@ -19,6 +20,22 @@ export function WorkspaceApp() {
   const [showSettings, setShowSettings] = useState(false);
   const [showAgents, setShowAgents] = useState(false);
   const [showDb, setShowDb] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hasOnboarded = localStorage.getItem("codeambers_onboarded");
+      if (!hasOnboarded) {
+        setShowOnboarding(true);
+      }
+    }
+  }, []);
+
+  const handleOnboardingComplete = (level: string) => {
+    localStorage.setItem("codeambers_onboarded", "true");
+    localStorage.setItem("codeambers_experience_level", level);
+    setShowOnboarding(false);
+  };
 
   useBackendConnection();
   const activeMode = useModeStore((state) => state.activeMode);
@@ -65,6 +82,7 @@ export function WorkspaceApp() {
       <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
       <AgentConfigModal isOpen={showAgents} onClose={() => setShowAgents(false)} />
       <DatabaseExplorerModal isOpen={showDb} onClose={() => setShowDb(false)} />
+      {showOnboarding && <ExperienceSelector onComplete={handleOnboardingComplete} />}
     </main>
   );
 }
