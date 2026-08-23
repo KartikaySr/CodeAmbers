@@ -118,16 +118,16 @@ export function AuthShell({ mode }: { mode: "sign-in" | "sign-up" | "forgot-pass
                 {storeError && <p className="rounded-lg border border-amber-core/20 bg-amber-core/10 px-3 py-2 text-sm text-amber-100">{storeError}</p>}
                 <Button type="submit" disabled={authLoading} className="mt-2 w-full disabled:cursor-not-allowed disabled:opacity-60">{authLoading ? "Authorizing..." : isForgot ? "Send reset link" : isSignUp ? "Create CodeAmbers workspace" : "Enter workspace"}</Button>
                 
-                {/* Dev Bypass */}
+                {/* Guest Bypass */}
                 <Button 
                   type="button" 
                   onClick={() => {
                     document.cookie = "dev_bypass=true; path=/";
                     router.push("/dashboard");
                   }} 
-                  className="mt-2 w-full border border-amber-core/20 bg-amber-core/5 text-amber-core hover:bg-amber-core/10"
+                  className="mt-4 w-full border border-amber-core/30 bg-amber-core/10 text-amber-core hover:bg-amber-core/20 font-medium"
                 >
-                  Bypass Auth (Local Dev)
+                  <Sparkles className="mr-2 size-4" /> Guest Login (Testing)
                 </Button>
               </form>
               <p className="mt-6 text-center text-sm text-zinc-500">
