@@ -126,9 +126,21 @@ export function PromptDock() {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} className="absolute bottom-5 left-5 right-5 z-20">
+    <div className="w-full flex-shrink-0 flex flex-col surface-workspace border-t border-subtle">
+      {/* Agent Activity Bar */}
+      <div className="h-8 px-4 flex items-center justify-between border-b border-subtle bg-white/[0.01]">
+        <div className="flex items-center gap-3 text-[11px] font-medium text-secondary tracking-wide uppercase">
+          <span className="flex items-center gap-1.5"><div className="size-1.5 rounded-full bg-emerald-500 animate-pulse" /> 3 Agents Working</span>
+          <span className="text-muted">|</span>
+          <span className="text-primary capitalize">Architect</span>
+          <span className="text-muted">·</span>
+          <span className="text-primary capitalize">Backend</span>
+          <span className="text-muted">·</span>
+          <span className="text-primary capitalize">Frontend</span>
+        </div>
+      </div>
       
-      {/* Attachments Display */}
+      <div className="px-4 py-3 relative">
       <AnimatePresence>
         {attachedFiles.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} className="mb-3 flex flex-wrap gap-2">
@@ -168,9 +180,7 @@ export function PromptDock() {
           )}
         </AnimatePresence>
 
-        <input type="file" ref={fileInputRef} className="hidden" accept=".pdf,image/*" onChange={handleFileUpload} />
-
-        <div className={cn("relative flex items-center gap-2 rounded-[20px] p-2 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-2xl border", isRecording ? "border-red-500/30 bg-red-500/5 ring-4 ring-red-500/10" : "border-white/[0.06] bg-[#09090b]/60 focus-within:bg-[#09090b]/80 focus-within:border-amber-500/30 focus-within:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_0_20px_rgba(255,170,0,0.1)]")}>
+        <div className={cn("relative flex items-center gap-2 rounded-lg transition-all duration-300", isRecording ? "bg-red-500/5 ring-1 ring-red-500/30" : "bg-transparent focus-within:bg-white/[0.02]")}>
           
           <div className="relative">
             <button 
@@ -237,6 +247,7 @@ export function PromptDock() {
           </button>
         </div>
       </div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

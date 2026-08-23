@@ -6,6 +6,7 @@ import { MessageBubble } from "@/components/workspace/MessageBubble";
 import { PromptDock } from "@/components/workspace/PromptDock";
 import { TypingIndicator } from "@/components/workspace/TypingIndicator";
 import { useWorkspace } from "@/hooks/useWorkspace";
+import { cn } from "@/lib/utils";
 
 export function ChatPanel() {
   const { messages, streaming, socketStatus, backendStatus, error } = useWorkspace();
@@ -15,31 +16,27 @@ export function ChatPanel() {
   }, [messages]);
 
   return (
-    <section className="glass floating-panel relative flex h-full min-h-0 w-full flex-col overflow-hidden">
-      <div className="shrink-0 border-b border-white/[0.04] px-6 py-5 bg-white/[0.01]">
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">Conversational Orchestration</motion.p>
-        <div className="mt-2 flex items-end justify-between gap-4">
-          <h1 className="text-xl font-semibold text-zinc-100 tracking-tight">Command Stream</h1>
-          <div className={[
-            "rounded-full border px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase shadow-sm",
-            socketStatus === "connected"
-              ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
-              : "border-amber-500/20 bg-amber-500/10 text-amber-500"
-          ].join(" ")}>
-            {backendStatus === "offline" ? "backend offline" : `websocket ${socketStatus}`}
-          </div>
+    <aside className="flex h-full min-h-0 w-full flex-col overflow-hidden surface-sidebar border-l border-subtle">
+      <div className="shrink-0 border-b border-subtle px-4 py-3 bg-surface-sidebar flex items-center justify-between">
+        <h2 className="text-[12px] font-semibold text-primary uppercase tracking-wider">Command Stream</h2>
+        <div className={cn(
+          "flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider",
+          socketStatus === "connected" ? "text-emerald-500" : "text-amber-500"
+        )}>
+          <div className={cn("size-1.5 rounded-full", socketStatus === "connected" ? "bg-emerald-500" : "bg-amber-500 animate-pulse")} />
+          {backendStatus === "offline" ? "Offline" : socketStatus}
         </div>
       </div>
-      <div ref={scrollRef} className="min-h-0 flex-1 space-y-5 overflow-y-auto px-5 pb-32 pt-5">
+      
+      <div ref={scrollRef} className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
         {error && (
-          <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="rounded-lg border border-amber-core/20 bg-amber-core/10 px-4 py-3 text-sm text-amber-100">
+          <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="rounded-md border border-error/20 bg-error/10 px-3 py-2 text-xs text-error">
             {error}
           </motion.div>
         )}
         {messages.map((message) => <MessageBubble key={message.id} message={message} />)}
         {streaming && <TypingIndicator />}
       </div>
-      <PromptDock />
-    </section>
+    </aside>
   );
 }

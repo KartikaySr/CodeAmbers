@@ -1,10 +1,11 @@
 "use client";
 
-import { Terminal, Lightbulb, Sparkles, X } from "lucide-react";
+import { Terminal, Lightbulb, Sparkles, X, Plus, Maximize2 } from "lucide-react";
 import { useWorkspace } from "@/hooks/useWorkspace";
 import { useState, useEffect } from "react";
 import { codeAmbersSocket } from "@/lib/socket";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export function TerminalPanel() {
   const { backendStatus, activeFile } = useWorkspace();
@@ -14,6 +15,8 @@ export function TerminalPanel() {
     { type: 'system', text: 'Terminal initialized. Ready for command execution.' }
   ]);
   const [executing, setExecuting] = useState(false);
+  const [terminals, setTerminals] = useState([{id: 1, name: "node server"}, {id: 2, name: "bash"}]);
+  const [activeTerminal, setActiveTerminal] = useState(1);
 
   useEffect(() => {
     const unsub = codeAmbersSocket.subscribe((event) => {
@@ -91,22 +94,32 @@ export function TerminalPanel() {
   };
   
   return (
-    <section className="glass floating-panel flex h-full min-h-0 w-full flex-col overflow-hidden relative">
-      <div className="flex shrink-0 items-center justify-between border-b border-white/5 px-4 py-2 bg-black/30">
+    <section className="flex h-[240px] w-full flex-col overflow-hidden bg-[#0A0A0A] border-t border-subtle">
+      <div className="flex shrink-0 items-center justify-between border-b border-subtle bg-surface-workspace px-4 py-2">
         <div className="flex items-center gap-2">
-          <Terminal className="size-3.5 text-amber-core/80" />
-          <p className="font-mono text-xs uppercase tracking-widest text-zinc-400 drop-shadow-sm">Terminal Output</p>
+          <div className="flex gap-2">
+            {terminals.map((t) => (
+              <button key={t.id} onClick={() => setActiveTerminal(t.id)} className={cn("rounded-md px-3 py-1 text-[11px] font-medium transition-colors", activeTerminal === t.id ? "bg-white/[0.08] text-primary" : "text-muted hover:bg-white/[0.04] hover:text-secondary")}>
+                {t.name}
+              </button>
+            ))}
+          </div>
+          <button className="grid size-6 place-items-center rounded-md text-muted hover:bg-white/[0.06] hover:text-secondary">
+            <Plus className="size-3.5" />
+          </button>
         </div>
-        <div className="flex gap-2">
-          <button onClick={handleExecuteCode} disabled={executing || !activeFile} className="floating-btn flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-200 hover:text-emerald-100 disabled:opacity-50">
-            <Terminal className="size-3" /> {executing ? "Running..." : "Run Code"}
+        <div className="flex items-center gap-2">
+          <button onClick={handleExecuteCode} disabled={executing || !activeFile} className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-200 hover:text-emerald-100 disabled:opacity-50">
+            <Terminal className="size-3" /> {executing ? "Running..." : "Run"}
           </button>
-          <button onClick={suggestCommand} disabled={loading} className="floating-btn flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-zinc-300 hover:text-white">
-            <Lightbulb className="size-3 text-amber-200" /> Suggest Command
+          <button onClick={suggestCommand} disabled={loading} className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-zinc-300 hover:text-white">
+            <Lightbulb className="size-3 text-amber-200" /> Suggest
           </button>
-          <button onClick={explainError} disabled={loading} className="floating-btn flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-red-500/10 border border-red-500/20 text-xs text-red-200 hover:text-red-100">
-            <Sparkles className="size-3" /> Explain Error
+          <button onClick={explainError} disabled={loading} className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-red-500/10 border border-red-500/20 text-xs text-red-200 hover:text-red-100">
+            <Sparkles className="size-3" /> Explain
           </button>
+          <button className="grid size-6 place-items-center rounded-md text-muted hover:bg-white/[0.06] hover:text-secondary"><Maximize2 className="size-3.5" /></button>
+          <button className="grid size-6 place-items-center rounded-md text-muted hover:bg-white/[0.06] hover:text-error"><X className="size-3.5" /></button>
         </div>
       </div>
       <div className="min-h-0 flex-1 overflow-auto p-4 font-mono text-[13px] leading-relaxed text-zinc-400 relative">
