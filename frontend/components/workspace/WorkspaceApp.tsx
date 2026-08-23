@@ -5,6 +5,7 @@ import { AmbientBackground } from "@/components/effects/AmbientBackground";
 import { Particles } from "@/components/effects/Particles";
 import { ChatPanel } from "@/components/workspace/ChatPanel";
 import { EditorPanel } from "@/components/workspace/EditorPanel";
+import { PreviewPanel } from "@/components/workspace/PreviewPanel";
 import { Sidebar } from "@/components/workspace/Sidebar";
 import { TerminalPanel } from "@/components/workspace/TerminalPanel";
 import { ExperienceSelector } from "@/components/onboarding/ExperienceSelector";
@@ -15,11 +16,13 @@ import { useModeStore, WORKSPACE_MODES } from "@/store/mode-store";
 import { SettingsModal } from "@/components/workspace/modals/SettingsModal";
 import { AgentConfigModal } from "@/components/workspace/modals/AgentConfigModal";
 import { DatabaseExplorerModal } from "@/components/workspace/modals/DatabaseExplorerModal";
+import { IntegrationsModal } from "@/components/workspace/modals/IntegrationsModal";
 
 export function WorkspaceApp() {
   const [showSettings, setShowSettings] = useState(false);
   const [showAgents, setShowAgents] = useState(false);
   const [showDb, setShowDb] = useState(false);
+  const [showIntegrations, setShowIntegrations] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
@@ -59,6 +62,7 @@ export function WorkspaceApp() {
         className="relative z-10 flex h-full w-full gap-4 p-4 pt-16"
       >
         <div className="absolute top-4 right-4 flex gap-3">
+          <button onClick={() => setShowIntegrations(true)} className="floating-btn glass px-4 py-2 rounded-md text-xs font-semibold text-blue-400 hover:text-blue-300 border border-blue-500/20">Integrations / Export</button>
           <button onClick={() => setShowDb(true)} className="floating-btn glass px-4 py-2 rounded-md text-xs font-semibold text-emerald-400 hover:text-emerald-300 border border-emerald-500/20">Supabase DB</button>
           <button onClick={() => setShowAgents(true)} className="floating-btn glass px-4 py-2 rounded-md text-xs font-semibold text-amber-core hover:text-amber-300 border border-amber-500/20">Agent Config</button>
           <button onClick={() => setShowSettings(true)} className="floating-btn glass px-4 py-2 rounded-md text-xs font-semibold text-zinc-300 hover:text-white border border-white/10">API Keys</button>
@@ -67,8 +71,13 @@ export function WorkspaceApp() {
           <Sidebar />
         </div>
         <div className="flex h-full min-h-0 flex-col gap-4 flex-1">
-          <div className="min-h-0 flex-[3] flex">
-            <EditorPanel />
+          <div className="min-h-0 flex-[3] flex gap-4">
+            <div className="flex-1 min-w-0">
+              <EditorPanel />
+            </div>
+            <div className="flex-1 min-w-0">
+              <PreviewPanel />
+            </div>
           </div>
           <div className="min-h-0 flex-[1] flex">
             <TerminalPanel />
@@ -82,6 +91,7 @@ export function WorkspaceApp() {
       <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
       <AgentConfigModal isOpen={showAgents} onClose={() => setShowAgents(false)} />
       <DatabaseExplorerModal isOpen={showDb} onClose={() => setShowDb(false)} />
+      <IntegrationsModal isOpen={showIntegrations} onClose={() => setShowIntegrations(false)} />
       {showOnboarding && <ExperienceSelector onComplete={handleOnboardingComplete} />}
     </main>
   );

@@ -7,9 +7,13 @@ import { codeAmbersSocket } from "@/lib/socket";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function TerminalPanel() {
-  const { backendStatus } = useWorkspace();
+  const { backendStatus, activeFile } = useWorkspace();
   const [aiExplanation, setAiExplanation] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [terminalOutput, setTerminalOutput] = useState<{type: 'system'|'stdout'|'stderr', text: string}[]>([
+    { type: 'system', text: 'Terminal initialized. Ready for command execution.' }
+  ]);
+  const [executing, setExecuting] = useState(false);
 
   useEffect(() => {
     const unsub = codeAmbersSocket.subscribe((event) => {
@@ -31,6 +35,61 @@ export function TerminalPanel() {
     codeAmbersSocket.send({ type: "AI_EXPLAIN_ERROR", errorOutput: "Suggest a command to install react and react-dom using npm." });
   };
   
+  const handleExecuteCode = async () => {
+    if (!activeFile || !activeFile.content) return;
+    
+    setExecuting(true);
+    setTerminalOutput(prev => [...prev, { type: 'system', text: `> Executing ${activeFile.name}...` }]);
+    
+    try {
+      // Map Monaco languages to Piston API languages
+      let pistonLanguage = activeFile.language;
+      let pistonVersion = '*';
+      
+      const langMap: Record<string, {lang: string, version: string}> = {
+        'javascript': { lang: 'javascript', version: '18.15.0' },
+        'typescript': { lang: 'typescript', version: '5.0.3' },
+        'python': { lang: 'python', version: '3.10.0' },
+        'java': { lang: 'java', version: '15.0.2' },
+        'c': { lang: 'c', version: '10.2.0' },
+        'cpp': { lang: 'cpp', version: '10.2.0' },
+        'ruby': { lang: 'ruby', version: '3.0.1' },
+        'swift': { lang: 'swift', version: '5.3.3' }
+      };
+      
+      if (langMap[activeFile.language]) {
+        pistonLanguage = langMap[activeFile.language].lang;
+        pistonVersion = langMap[activeFile.language].version;
+      }
+      
+      const apiUrl = process.env.NEXT_PUBLIC_WS_URL?.replace('ws://', 'http://').replace('wss://', 'https://').replace('/ws', '') || 'http://localhost:8080';
+      const response = await fetch(`${apiUrl}/api/execute`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          language: pistonLanguage,
+          version: pistonVersion,
+          code: activeFile.content
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (result.error) {
+        setTerminalOutput(prev => [...prev, { type: 'stderr', text: result.error }]);
+      } else if (result.run) {
+        if (result.run.stdout) setTerminalOutput(prev => [...prev, { type: 'stdout', text: result.run.stdout }]);
+        if (result.run.stderr) setTerminalOutput(prev => [...prev, { type: 'stderr', text: result.run.stderr }]);
+        setTerminalOutput(prev => [...prev, { type: 'system', text: `> Process exited with code ${result.run.code}` }]);
+      }
+    } catch (err) {
+      console.error(err);
+      setTerminalOutput(prev => [...prev, { type: 'stderr', text: 'Failed to connect to execution engine.' }]);
+    } finally {
+      setExecuting(false);
+    }
+  };
+  
   return (
     <section className="glass floating-panel flex h-full min-h-0 w-full flex-col overflow-hidden relative">
       <div className="flex shrink-0 items-center justify-between border-b border-white/5 px-4 py-2 bg-black/30">
@@ -39,6 +98,9 @@ export function TerminalPanel() {
           <p className="font-mono text-xs uppercase tracking-widest text-zinc-400 drop-shadow-sm">Terminal Output</p>
         </div>
         <div className="flex gap-2">
+          <button onClick={handleExecuteCode} disabled={executing || !activeFile} className="floating-btn flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-200 hover:text-emerald-100 disabled:opacity-50">
+            <Terminal className="size-3" /> {executing ? "Running..." : "Run Code"}
+          </button>
           <button onClick={suggestCommand} disabled={loading} className="floating-btn flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-zinc-300 hover:text-white">
             <Lightbulb className="size-3 text-amber-200" /> Suggest Command
           </button>
@@ -55,14 +117,18 @@ export function TerminalPanel() {
         </div>
         <div>
           {backendStatus === "online" ? (
-            <span className="text-emerald-400">Connected to secure runtime environment.</span>
+            <span className="text-emerald-400">Connected to secure runtime environment. Multi-language execution enabled.</span>
           ) : (
             <span className="text-amber-500/80">Local development mode. Backend offline. Executing in local sandbox cache...</span>
           )}
         </div>
-        <div className="mt-4 text-red-400/80">Error: Cannot find module 'react'.</div>
-        <div className="mt-1 text-red-400/80">Require stack:</div>
-        <div className="mt-1 text-red-400/80">- /app/index.js</div>
+        <div className="mt-4 flex flex-col gap-1">
+          {terminalOutput.map((out, i) => (
+            <div key={i} className={out.type === 'stderr' ? 'text-red-400/90 whitespace-pre-wrap' : out.type === 'stdout' ? 'text-zinc-300 whitespace-pre-wrap' : 'text-blue-400/80 whitespace-pre-wrap'}>
+              {out.text}
+            </div>
+          ))}
+        </div>
         <div className="mt-4 animate-pulse">_</div>
       </div>
       
